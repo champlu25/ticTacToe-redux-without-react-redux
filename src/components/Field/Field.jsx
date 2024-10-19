@@ -4,13 +4,16 @@ import { store } from "../../store";
 // stateless-компонент
 // Игровое поле 3x3 (9 кнопок)
 const FieldLayout = () => {
+  const { field, currentPlayer, isGameEnded } = store.getState();
+
   const onClick = (currentPlayer, index) => {
     store.dispatch({
       type: "SET_FIELD",
       payload: { currentPlayer, index },
     });
 
-    const { field } = store.getState();
+    const updateField = [...field];
+    updateField[index] = currentPlayer;
 
     const WIN_PATTERNS = [
       [0, 1, 2],
@@ -25,8 +28,8 @@ const FieldLayout = () => {
 
     // Проверка на победу
     for (let i = 0; i < WIN_PATTERNS.length; i++) {
-      const xWin = WIN_PATTERNS[i].every((el) => field[el] === "X");
-      const oWin = WIN_PATTERNS[i].every((el) => field[el] === "O");
+      const xWin = WIN_PATTERNS[i].every((el) => updateField[el] === "X");
+      const oWin = WIN_PATTERNS[i].every((el) => updateField[el] === "O");
 
       if (xWin || oWin) {
         store.dispatch({ type: "SET_STATUS_GAME_END", payload: true });
@@ -35,7 +38,7 @@ const FieldLayout = () => {
     }
 
     // Проверка на ничью
-    const isFinish = field.every((el) => el !== "");
+    const isFinish = updateField.every((el) => el !== "");
     if (isFinish) {
       store.dispatch({ type: "SET_STATUS_GAME_DRAW", payload: true });
       store.dispatch({ type: "SET_STATUS_GAME_END", payload: true });
@@ -46,8 +49,6 @@ const FieldLayout = () => {
       });
     }
   };
-
-  const { field, currentPlayer, isGameEnded } = store.getState();
 
   return (
     <div className={styles.playingField}>
