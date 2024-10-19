@@ -1,22 +1,15 @@
-import styles from "./information.module.css";
 import { store } from "../../store";
+import { InformationLayout } from "./InformationLayout";
 
-// stateless-компонент
-const InformationLayout = () => {
+// statefull-компонент
+export const Information = () => {
   const { isDraw, isGameEnded, currentPlayer } = store.getState();
 
   return (
-    <div className={styles.statusGame}>
-      {isGameEnded && !isDraw ? `Победа: ${currentPlayer}` : null}
-      {isDraw ? "Ничья" : null}
-      {!isDraw && !isGameEnded ? `Ходит: ${currentPlayer}` : null}
-    </div>
+    <InformationLayout
+      isDraw={isDraw}
+      isGameEnded={isGameEnded}
+      currentPlayer={currentPlayer}
+    />
   );
 };
-
-// statefull-компонент
-const Information = () => {
-  return <InformationLayout />;
-};
-
-export default Information;

@@ -1,35 +1,22 @@
 import "./App.css";
-import Field from "./components/Field/Field";
-import Information from "./components/Information/Information";
+import { AppLayout } from "./components";
 import { useState, useEffect } from "react";
 import { store } from "./store";
 
-const AppLayout = () => {
-  return (
-    <>
-      <Information />
-      <Field />
-      <button
-        className="restart-btn"
-        onClick={() => {
-          store.dispatch({ type: "RESTART_GAME" });
-        }}
-      >
-        Начать заново
-      </button>
-    </>
-  );
-};
-
 function App() {
   const [state, setState] = useState(store.getState());
+
+  const onRestart = () => {
+    store.dispatch({ type: "RESTART_GAME" });
+  };
+
   useEffect(() => {
     const unsubscribe = store.subscribe(() => {
       setState(store.getState());
     });
     return () => unsubscribe();
   });
-  return <AppLayout />;
+  return <AppLayout onRestart={onRestart} />;
 }
 
 export default App;

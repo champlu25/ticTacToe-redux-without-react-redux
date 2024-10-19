@@ -1,9 +1,8 @@
-import styles from "./field.module.css";
+import { FieldLayout } from "./FieldLayout";
 import { store } from "../../store";
 
-// stateless-компонент
-// Игровое поле 3x3 (9 кнопок)
-const FieldLayout = () => {
+// statefull-компонент:
+export const Field = () => {
   const { field, currentPlayer, isGameEnded } = store.getState();
 
   const onClick = (currentPlayer, index) => {
@@ -51,24 +50,11 @@ const FieldLayout = () => {
   };
 
   return (
-    <div className={styles.playingField}>
-      {field.map((cell, index) => (
-        <button
-          disabled={field[index] !== "" || isGameEnded}
-          onClick={() => onClick(currentPlayer, index)}
-          key={index}
-          className={styles.cell}
-        >
-          {cell}
-        </button>
-      ))}
-    </div>
+    <FieldLayout
+      field={field}
+      isGameEnded={isGameEnded}
+      onClick={onClick}
+      currentPlayer={currentPlayer}
+    />
   );
 };
-
-// statefull-компонент:
-const Field = () => {
-  return <FieldLayout />;
-};
-
-export default Field;
